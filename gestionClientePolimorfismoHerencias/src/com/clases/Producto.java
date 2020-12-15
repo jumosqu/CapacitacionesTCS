@@ -6,6 +6,13 @@ public class Producto {
     private String idProducto;
     private String condiciones;
 
+    public Producto(String nombre, String carateristicas, String idProducto, String condiciones) {
+        this.nombre = nombre;
+        this.carateristicas = carateristicas;
+        this.idProducto = idProducto;
+        this.condiciones = condiciones;
+    }
+
     public String getNombre() {
         return nombre;
     }
