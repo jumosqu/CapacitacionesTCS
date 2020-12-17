@@ -10,12 +10,13 @@ public class Clientes {
     private String documento;
     private List<Producto> productos;
 
-    public Clientes(String nombre, String telefono, String direccion, String tipDoc, String documento) {
+    public Clientes(String nombre, String telefono, String direccion, String tipDoc, String documento,List<Producto> productos) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.direccion = direccion;
         this.tipDoc = tipDoc;
         this.documento = documento;
+        this.productos = productos;
     }
 
     public String getDocumento() {

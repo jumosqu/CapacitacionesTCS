@@ -35,10 +35,10 @@ public class Main {
             opMenu = in.nextInt();
             switch (opMenu.toString()) {
                 case "1":
-                    clientes = agregarCliente(clientes);
+                    clientes = agregarCliente(clientes, productos);
                     break;
                 case "2":
-                    clientes = editarClientes(clientes);
+                    clientes = editarClientes(clientes, productos);
                     break;
                 case "3":
                     clientes = eliminarClientes(clientes);
@@ -73,6 +73,15 @@ public class Main {
             Empresas empresa  = (Empresas) clientes.get(index);
             System.out.println("Nombre del representante: " + empresa.getRepresentante() + "\n");
         }
+        System.out.println("Sus productos son: ");
+        for (int i = 0; i < clientes.get(index).getProductos().size(); i++){
+            System.out.println(
+                    "Id del producto: " + clientes.get(index).getProductos().get(i).getIdProducto() +
+                            " Nombre del producto: " + clientes.get(index).getProductos().get(i).getNombre() +
+                            " Carateristica del producto: " + clientes.get(index).getProductos().get(i).getCarateristicas() +
+                            " Condiciones del producto: " + clientes.get(index).getProductos().get(i).getCondiciones()
+            );
+        }
     }
 
     public static ArrayList<Producto> agregarProductos(ArrayList<Producto> productos){
@@ -90,16 +99,24 @@ public class Main {
         return productos;
     }
 
-    public static ArrayList<Clientes> agregarCliente(ArrayList<Clientes> clientes){
+    public static ArrayList<Clientes> agregarCliente(ArrayList<Clientes> clientes, ArrayList<Producto> productos){
         Scanner in = new Scanner(System.in);
         System.out.println("Ingrese el tipo de cliente 'Persona o Empresa'");
         String tipoCliente = in.nextLine();
         String opcion;
         do {
             if (tipoCliente.equalsIgnoreCase("Persona")){
-                clientes.add(personas());
+                if (validarExitenciaProduc(productos)){
+                    clientes.add(personas(productos));
+                }else{
+                    break;
+                }
             }else if (tipoCliente.equalsIgnoreCase("Empresa")){
-                clientes.add(empresas());
+                if (validarExitenciaProduc(productos)){
+                    clientes.add(empresas(productos));
+                }else{
+                    break;
+                }
             }
             System.out.println("Desea agregar mas clientes 'Si o No'");
             opcion = in.nextLine();
@@ -111,7 +128,7 @@ public class Main {
 
         return clientes;
     }
-    public static ArrayList<Clientes> editarClientes(ArrayList<Clientes> clientes){
+    public static ArrayList<Clientes> editarClientes(ArrayList<Clientes> clientes, ArrayList<Producto> productos){
         Scanner in = new Scanner(System.in);
         System.out.println("Ingrese el tipo de cliente 'Persona o Empresa'");
         String tipoCliente = in.nextLine();
@@ -123,13 +140,20 @@ public class Main {
                 System.out.println("Ingrese el tipo y número documento del cliente a editar");
                 tipo = in.nextLine();
                 documento = in.nextLine();
-                clientes = guardarEdicion(clientes,"persona", tipo, documento);
-
+                if (validarExitenciaProduc(productos)){
+                    clientes = guardarEdicion(clientes,"persona", tipo, documento, productos);
+                }else{
+                    break;
+                }
             }else if (tipoCliente.equalsIgnoreCase("Empresa")){
                 System.out.println("Ingrese el tipo y número documento de la empresa a editar");
                 tipo = in.nextLine();
                 documento = in.nextLine();
-                clientes = guardarEdicion(clientes,"empresa", tipo, documento);
+                if (validarExitenciaProduc(productos)){
+                    clientes = guardarEdicion(clientes,"empresa", tipo, documento, productos);
+                }else{
+                    break;
+                }
             }
             System.out.println("Desea editar mas clientes 'Si o No'");
             opcion = in.nextLine();
@@ -173,17 +197,18 @@ public class Main {
         }
     return index;
     }
-    public static ArrayList<Clientes> guardarEdicion(ArrayList<Clientes> clientes,String tipoCliente ,String tipoDoc, String documento){
+    public static ArrayList<Clientes> guardarEdicion(ArrayList<Clientes> clientes,String tipoCliente ,String tipoDoc,
+                                                     String documento, ArrayList<Producto> productos){
         for (int i = 0; i < clientes.size(); i++){
             if (tipoCliente.equalsIgnoreCase("persona")){
                 if (clientes.get(i).getTipDoc().equalsIgnoreCase(tipoDoc) && clientes.get(i).getDocumento().equalsIgnoreCase(documento)){
-                    clientes.set(i, personas());
+                    clientes.set(i, personas(productos));
                     System.out.println("Registro realizado correctamente");
                     break;
                 }
             }else if (tipoCliente.equalsIgnoreCase("empresa")){
                 if (clientes.get(i).getTipDoc().equalsIgnoreCase(tipoDoc) && clientes.get(i).getDocumento().equalsIgnoreCase(documento)){
-                    clientes.set(i, empresas());
+                    clientes.set(i, empresas(productos));
                     System.out.println("Registro realizado correctamente");
                     break;
                 }
@@ -191,7 +216,40 @@ public class Main {
         }
         return clientes ;
     }
-    public static Clientes empresas(){
+    public static Boolean validarExitenciaProduc(ArrayList<Producto> productos){
+            if (productos.size() < 1){
+                System.out.println("Se deben agregar productos para avanzar");
+                return false;
+            }else{
+                for (int i = 0; i < productos.size(); i++){
+                    System.out.println(
+                            "Id del producto: " + productos.get(i).getIdProducto() +
+                            " Nombre del producto: " + productos.get(i).getNombre() +
+                            " Carateristica del producto: " + productos.get(i).getCarateristicas() +
+                            " Condiciones del producto: " + productos.get(i).getCondiciones()
+                    );
+                }
+                return true;
+            }
+    }
+    public static ArrayList<Producto> agregarProductoClien(ArrayList<Producto> productos){
+        Scanner scanner = new Scanner(System.in);
+        String opcion;
+        ArrayList<Producto> productos1 = new ArrayList<>();
+        System.out.println("Ingrese el/los id de productos a agregar al cliente");
+        String id = scanner.nextLine();
+        do{
+            for (Integer i = 0; i < productos.size(); i++){
+                if (productos.get(i).getIdProducto().equalsIgnoreCase(id)) {
+                    productos1.add(productos.get(i));
+                }
+            }
+            System.out.println("Desea agregar mas productos (Si o No)");
+            opcion = scanner.nextLine();
+        }while (opcion.equalsIgnoreCase("si"));
+        return productos1;
+    }
+    public static Clientes empresas(ArrayList<Producto> productos){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Ingrese el nombre de la empresa");
         String nombre = scanner.nextLine();
@@ -205,10 +263,11 @@ public class Main {
         String documento = scanner.nextLine();
         System.out.println("Ingrese el nombre del representante de la empresa");
         String representante = scanner.nextLine();
-        return new Empresas(nombre,telefono,direccion,tipoDoc,documento,representante);
+        return new Empresas(nombre,telefono,direccion,tipoDoc,documento,representante, agregarProductoClien(productos));
     }
-     public static Clientes personas(){
+     public static Clientes personas(ArrayList<Producto> productos){
         Scanner scanner = new Scanner(System.in);
+        String opcion;
         System.out.println("Ingrese el nombre del cliente");
         String nombre = scanner.nextLine();
         System.out.println("Ingrese el teléfono del cliente");
@@ -219,6 +278,6 @@ public class Main {
         String tipoDoc = scanner.nextLine();
         System.out.println("Ingrese el número de documento del cliente");
         String documento = scanner.nextLine();
-        return new Personas(nombre,telefono,direccion,tipoDoc,documento);
+        return new Personas(nombre,telefono,direccion,tipoDoc,documento, agregarProductoClien(productos));
     }
 }
