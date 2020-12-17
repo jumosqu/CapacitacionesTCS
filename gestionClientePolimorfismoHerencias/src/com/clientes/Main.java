@@ -64,24 +64,29 @@ public class Main {
     public static void consultarClientes(ArrayList<Clientes> clientes){
         Scanner in = new Scanner(System.in);
         int index = buscarIndex(clientes);
-        System.out.println("Nombre: " + clientes.get(index).getNombre() + "\n" +
-                "Tipo de documento: " + clientes.get(index).getTipDoc() + "\n" +
-                "Documento: " + clientes.get(index).getDocumento() + "\n" +
-                "Direccion: " + clientes.get(index).getDireccion() + "\n" +
-                "Teléfono: " + clientes.get(index).getTelefono());
-        if (clientes.get(index).getTipDoc().equalsIgnoreCase("nit")){
-            Empresas empresa  = (Empresas) clientes.get(index);
-            System.out.println("Nombre del representante: " + empresa.getRepresentante() + "\n");
+        if (index != -1){
+            System.out.println("Nombre: " + clientes.get(index).getNombre() + "\n" +
+                    "Tipo de documento: " + clientes.get(index).getTipDoc() + "\n" +
+                    "Documento: " + clientes.get(index).getDocumento() + "\n" +
+                    "Direccion: " + clientes.get(index).getDireccion() + "\n" +
+                    "Teléfono: " + clientes.get(index).getTelefono());
+            if (clientes.get(index).getTipDoc().equalsIgnoreCase("nit")){
+                Empresas empresa  = (Empresas) clientes.get(index);
+                System.out.println("Nombre del representante: " + empresa.getRepresentante());
+            }
+            System.out.println("Sus productos son: ");
+            for (int i = 0; i < clientes.get(index).getProductos().size(); i++){
+                System.out.println(i +
+                        " Id del producto: " + clientes.get(index).getProductos().get(i).getIdProducto() +
+                                " Nombre del producto: " + clientes.get(index).getProductos().get(i).getNombre() +
+                                " Carateristica del producto: " + clientes.get(index).getProductos().get(i).getCarateristicas() +
+                                " Condiciones del producto: " + clientes.get(index).getProductos().get(i).getCondiciones()
+                );
+            }
+        }else {
+            System.out.println("No existe el usuario");
         }
-        System.out.println("Sus productos son: ");
-        for (int i = 0; i < clientes.get(index).getProductos().size(); i++){
-            System.out.println(
-                    "Id del producto: " + clientes.get(index).getProductos().get(i).getIdProducto() +
-                            " Nombre del producto: " + clientes.get(index).getProductos().get(i).getNombre() +
-                            " Carateristica del producto: " + clientes.get(index).getProductos().get(i).getCarateristicas() +
-                            " Condiciones del producto: " + clientes.get(index).getProductos().get(i).getCondiciones()
-            );
-        }
+
     }
 
     public static ArrayList<Producto> agregarProductos(ArrayList<Producto> productos){
@@ -89,7 +94,7 @@ public class Main {
         int id = productos.size();
         System.out.println("Ingrese el nombre del producto");
         String nombre = in.nextLine();
-        System.out.println("id: " + (id+1) + " producto generado automaticamente");
+        System.out.println("id: " + (id) + " producto generado automaticamente");
         String idProducto = "" + id + 1;
         System.out.println("Ingrese una caracteristica del producto");
         String caracteristica = in.nextLine();
@@ -171,7 +176,7 @@ public class Main {
         int index;
         do {
             index = buscarIndex(clientes);
-            if (index != 0) {
+            if (index != -1) {
                 clientes.remove(index);
                 System.out.println("Registro eliminado correctamente");
             }else{
@@ -193,26 +198,36 @@ public class Main {
         for (int i = 0; i < clientes.size(); i++){
             if (clientes.get(i).getTipDoc().equalsIgnoreCase(tipo) && clientes.get(i).getDocumento().equalsIgnoreCase(documento)){
                 return i;
+            }else{
+                return index;
             }
         }
     return index;
     }
     public static ArrayList<Clientes> guardarEdicion(ArrayList<Clientes> clientes,String tipoCliente ,String tipoDoc,
                                                      String documento, ArrayList<Producto> productos){
-        for (int i = 0; i < clientes.size(); i++){
-            if (tipoCliente.equalsIgnoreCase("persona")){
-                if (clientes.get(i).getTipDoc().equalsIgnoreCase(tipoDoc) && clientes.get(i).getDocumento().equalsIgnoreCase(documento)){
-                    clientes.set(i, personas(productos));
-                    System.out.println("Registro realizado correctamente");
-                    break;
-                }
-            }else if (tipoCliente.equalsIgnoreCase("empresa")){
-                if (clientes.get(i).getTipDoc().equalsIgnoreCase(tipoDoc) && clientes.get(i).getDocumento().equalsIgnoreCase(documento)){
-                    clientes.set(i, empresas(productos));
-                    System.out.println("Registro realizado correctamente");
-                    break;
+        if (clientes.size() != 0){
+            for (int i = 0; i < clientes.size(); i++){
+                if (tipoCliente.equalsIgnoreCase("persona")){
+                    if (clientes.get(i).getTipDoc().equalsIgnoreCase(tipoDoc) && clientes.get(i).getDocumento().equalsIgnoreCase(documento)){
+                        clientes.set(i, personas(productos));
+                        System.out.println("Registro realizado correctamente");
+                        break;
+                    }else{
+                        System.out.println("No existe el usuario");
+                    }
+                }else if (tipoCliente.equalsIgnoreCase("empresa")){
+                    if (clientes.get(i).getTipDoc().equalsIgnoreCase(tipoDoc) && clientes.get(i).getDocumento().equalsIgnoreCase(documento)){
+                        clientes.set(i, empresas(productos));
+                        System.out.println("Registro realizado correctamente");
+                        break;
+                    }else{
+                        System.out.println("No existe el usuario");
+                    }
                 }
             }
+        }else {
+            System.out.println("No hay clientes registrados");
         }
         return clientes ;
     }
@@ -246,7 +261,7 @@ public class Main {
             }
             System.out.println("Desea agregar mas productos (Si o No)");
             opcion = scanner.nextLine();
-        }while (opcion.equalsIgnoreCase("si"));
+        }while (opcion.equalsIgnoreCase("SI") == true);
         return productos1;
     }
     public static Clientes empresas(ArrayList<Producto> productos){
