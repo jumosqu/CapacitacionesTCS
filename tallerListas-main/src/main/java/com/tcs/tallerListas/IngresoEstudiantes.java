@@ -30,7 +30,8 @@ public class IngresoEstudiantes {
 				estudiantes.add(new Estudiante(estData.get(i)[0],
 						estData.get(i)[1],
 						estData.get(i)[2],
-						estData.get(i)[3]));
+						estData.get(i)[3],
+						estData.get(i)[4]));
 			}
 			imprimir(estudiantes);
 		} catch (FileNotFoundException e) {
@@ -42,7 +43,8 @@ public class IngresoEstudiantes {
 		System.out.println("Ingrese una opción 1. para ver el total de estudiantes \n" +
 				"Ingrese una opción 2. para ver estudiantes entre 6 y 10 años \n" +
 				"Ingrese una opción 3. para ver estudiantes por grado \n" +
-				"Ingrese una opción 4. para ver estudiantes con identificador TI ");
+				"Ingrese una opción 4. para ver estudiantes con identificador TI \n" +
+				"Ingrese una opción 4. para ver estudiantes que repiten");
 		Scanner opciones = new Scanner(System.in);
 		int opcion = opciones.nextInt();
 		if (opcion == 1) {
@@ -54,9 +56,25 @@ public class IngresoEstudiantes {
 		}else if (opcion == 4) {
 			System.out.println("Estudiantes con TI en su identificación \n" );
 			filtro(estudiante);
+		}
+		else if (opcion == 5) {
+			System.out.println("Estudiantes que repiten grado \n" );
+			repitentes(estudiante);
+		}else{
+			System.out.println("Opcion no valida" );
 
 		}
 	}
+	public static void repitentes(List<Estudiante> estudiante){
+		for (int i = 0; i < estudiante.size(); i++) {
+			if (estudiante.get(i).getPromocion().equalsIgnoreCase("Repite")){
+				System.out.println("Nombre: " + estudiante.get(i).getNombre() + "\n"
+						+ "Grado: " + estudiante.get(i).getGrado());
+				System.out.println("====================================================== \n");
+			}
+		}
+	}
+
 	public static void filtro(List<Estudiante> estudiante){
 		for (int i = 0; i < estudiante.size(); i++) {
 			if (estudiante.get(i).getId().contains("TI")){
@@ -105,22 +123,22 @@ public class IngresoEstudiantes {
 		for (int i = 0; i < estudiante.size(); i++) {
 			if (estudiante.get(i).getGrado().equalsIgnoreCase("Jardin")){
 				jardin.add(new Estudiante(estudiante.get(i).getId(),estudiante.get(i).getNombre(),
-						estudiante.get(i).getEdad(),estudiante.get(i).getGrado()));
+						estudiante.get(i).getEdad(),estudiante.get(i).getGrado(),estudiante.get(i).getPromocion()));
 			}else if (estudiante.get(i).getGrado().equalsIgnoreCase("Primero")){
 				primero.add(new Estudiante(estudiante.get(i).getId(),estudiante.get(i).getNombre(),
-						estudiante.get(i).getEdad(),estudiante.get(i).getGrado()));
+						estudiante.get(i).getEdad(),estudiante.get(i).getGrado(),estudiante.get(i).getPromocion()));
 			}else if (estudiante.get(i).getGrado().equalsIgnoreCase("Segundo")){
 				segundo.add(new Estudiante(estudiante.get(i).getId(),estudiante.get(i).getNombre(),
-						estudiante.get(i).getEdad(),estudiante.get(i).getGrado()));
+						estudiante.get(i).getEdad(),estudiante.get(i).getGrado(),estudiante.get(i).getPromocion()));
 			}else if (estudiante.get(i).getGrado().equalsIgnoreCase("Tercero")){
 				tercero.add(new Estudiante(estudiante.get(i).getId(),estudiante.get(i).getNombre(),
-						estudiante.get(i).getEdad(),estudiante.get(i).getGrado()));
+						estudiante.get(i).getEdad(),estudiante.get(i).getGrado(),estudiante.get(i).getPromocion()));
 			}else if (estudiante.get(i).getGrado().equalsIgnoreCase("Cuarto")){
 				cuarto.add(new Estudiante(estudiante.get(i).getId(),estudiante.get(i).getNombre(),
-						estudiante.get(i).getEdad(),estudiante.get(i).getGrado()));
+						estudiante.get(i).getEdad(),estudiante.get(i).getGrado(),estudiante.get(i).getPromocion()));
 			}else if (estudiante.get(i).getGrado().equalsIgnoreCase("Quinto")){
 				quinto.add(new Estudiante(estudiante.get(i).getId(),estudiante.get(i).getNombre(),
-						estudiante.get(i).getEdad(),estudiante.get(i).getGrado()));
+						estudiante.get(i).getEdad(),estudiante.get(i).getGrado(),estudiante.get(i).getPromocion()));
 			}
 
 		}

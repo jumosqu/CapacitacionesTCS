@@ -6,12 +6,14 @@ public class Estudiante {
     private String nombre;
     private String edad;
     private String grado;
+    private String promocion;
 
-    public Estudiante(String id, String nombre, String edad, String grado) {
+    public Estudiante(String id, String nombre, String edad, String grado,String promocion) {
         this.id = id;
         this.nombre = nombre;
         this.edad = edad;
         this.grado = grado;
+        this.promocion = promocion;
     }
 
     public String getId() {
@@ -44,5 +46,13 @@ public class Estudiante {
 
     public void setGrado(String grado) {
         this.grado = grado;
+    }
+
+    public String getPromocion() {
+        return promocion;
+    }
+
+    public void setPromocion(String promocion) {
+        this.promocion = promocion;
     }
 }
